@@ -8,7 +8,7 @@ define("CLASSES", ROOT . "/classes/");
 define("TEMPLATE_PATH", ROOT . "/templates/");
 
 
-define('APP_ID', '6494753');
-define('APP_SECRET', 'omK1Ux8Uo1lFFRca4FlZ');
-define('URL', 'https://messwall.000webhostapp.com');
+define('APP_ID', '6494881');
+define('APP_SECRET', 'rQ70NDYic15SsuIkEEd6');
+define('URL', 'https://messwall.000webhostapp.com/vk.php');
 

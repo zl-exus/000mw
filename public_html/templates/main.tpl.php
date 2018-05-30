@@ -28,18 +28,24 @@
         <div class="strict">
             <div class="container">
                 <div class="row">
-                    <div class="fb-block">
-                        <a href="https://oauth.vk.com/authorize?client_id=<?= APP_ID; ?>&display=page&redirect_uri=<?= URL; ?>&response_type=code&v=5.52">Войти через VK</a>
-                    </div>
-                    <div class="form-wrap">
-                        <form id="message" method="post">
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Введите сообщение</label>
-                                <input id="user-id" name="user-id" type="hidden" value="">            <!-- добавить id пользователя-->
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="message[text]"></textarea>
+                    <div class="wrap">
+                        <div class="soc">
+                            <h4>Войдите для того чтобы оставить сообщение или прокомментировать существующие</h4>
+                            <div class="fb-block">
+                                <a href="https://oauth.vk.com/authorize?client_id=<?= APP_ID; ?>&display=page&redirect_uri=<?= URL; ?>&response_type=code&v=5.52">Войти через</a>
+                                <img src="../img/vk.svg" alt="vk">
                             </div>
-                            <button type="submit" class="btn btn-primary">Опубликовать</button>
-                        </form>
+                        </div>
+                        <div class="form-wrap">
+                            <form id="message" method="post">
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Введите сообщение</label>
+                                    <input id="user-id" name="user-id" type="hidden" value="">
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="message[text]"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Опубликовать</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,7 +101,7 @@
             </div>
         </div>
         <div id="1" class="info"></div>
-        
+
         <script src="js/libs.min.js"></script>
         <script src="js/main.min.js"></script>
 
