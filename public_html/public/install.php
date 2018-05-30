@@ -32,7 +32,7 @@ create table message_body
   message text
 );');
     echo '<div class="info"><h4> Необходимые таблицы созданы, для начала работы можете перейти по следующей ссылке: </h4>'
-    . '<a href="' . $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '">' . $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '</a></div>';
+    . '<a href="' . $protocol . $_SERVER['HTTP_HOST'] . '">' . $protocol . $_SERVER['HTTP_HOST'] . '</a></div>';
 } catch (PDOException $ex) {
     echo '<p>Что-то пошло не так: </p>' . $ex->getMessage() . ' <br>';
 }

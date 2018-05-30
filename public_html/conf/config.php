@@ -10,5 +10,5 @@ define("TEMPLATE_PATH", ROOT . "/templates/");
 
 define('APP_ID', '6494753');
 define('APP_SECRET', 'omK1Ux8Uo1lFFRca4FlZ');
-define('URL', 'http://messwall.zzz.com.ua/vk.php');
+define('URL', 'https://messwall.000webhostapp.com');
 

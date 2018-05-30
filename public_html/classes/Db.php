@@ -6,10 +6,10 @@ use PDO;
 class Db
 {
 
-    const USER = "mwuser";
-    const PASS = "88asQJJ2";
-    const HOST = "mysql.zzz.com.ua";
-    const DB   = "adm8887us";    
+    const USER = "id6002264_mwdbuser";
+    const PASS = "8864aamKK";
+    const HOST = "localhost";
+    const DB   = "id6002264_mwdb";    
 
     public static function connectDb()
     {
