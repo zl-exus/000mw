@@ -13,9 +13,10 @@ try {
         'create table authors 
 (
     author_id int unsigned not null auto_increment primary key,
-    name tinytext not null,
+    first_name tinytext not null,
+    last_name tinytext not null,
     date_registration datetime not null DEFAULT CURRENT_TIMESTAMP,
-    email tinytext
+    soc_id tinytext
 );
 
 create table message_header

@@ -29,6 +29,7 @@
             <div class="container">
                 <div class="row">
                     <div class="wrap">
+                        <?php if (!isset($_SESSION['user-data'])) : ?>
                         <div class="soc">
                             <h4>Войдите для того чтобы оставить сообщение или прокомментировать существующие</h4>
                             <div class="fb-block">
@@ -36,6 +37,8 @@
                                 <img src="../img/vk.svg" alt="vk">
                             </div>
                         </div>
+                        <?php else :
+                        ?>
                         <div class="form-wrap">
                             <form id="message" method="post">
                                 <div class="form-group">
@@ -46,6 +49,8 @@
                                 <button type="submit" class="btn btn-primary">Опубликовать</button>
                             </form>
                         </div>
+                        <?php endif; ?>
+                        <b><?php if (isset($_SESSION['user-data'])) print_r($_SESSION['user-data']); ?></b>
                     </div>
                 </div>
             </div>
