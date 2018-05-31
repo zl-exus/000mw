@@ -22,7 +22,8 @@
 }());
 
 $('#message').submit(function() {
+  var user_id = $('#urid').html()
   var hid_input_id = $('#user-id');
-  hid_input_id.attr('value', 2);
+  hid_input_id.attr('value', user_id);
 });
 

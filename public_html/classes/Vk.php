@@ -11,7 +11,7 @@ class Vk
 
     private $app_id = APP_ID;
     private $app_secret = APP_SECRET;
-    private $url = URL;
+    private $url = URL . '/login.php';
 
     public function getToken($code)
     {

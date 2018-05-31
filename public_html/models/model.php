@@ -3,25 +3,6 @@ namespace classes;
 
 $db = new Db;
 
-if (!isset($_SESSION['user_data'])) {
-    session_start();
-    
-    if (isset($_GET['code'])) {
-        $vk = new Vk();
-        $token = $vk->getToken($_GET['code']);
-        $data = $vk->getData($token);
-        $_SESSION['user_data'] = $data;
-        
-        if (!$db->isRegstredVk($data)) {
-            $db->addUserVk($data);
-        }
-
-        header("Location: /");
-    }
-}  else {
-    print_r($_SESSION['user_data']);
-}
-
 
 
 if (isset($_POST['message']['text'])) {

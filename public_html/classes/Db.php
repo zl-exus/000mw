@@ -116,7 +116,7 @@ class Db
             $add_user->execute();
         }
     }
-
+    
     public function isRegstredVk($user_data)
     {
         $isRegistred = false;
@@ -133,5 +133,17 @@ class Db
         }
 
         return $isRegistred;
+    }
+    public function getAuthorId($user_data)
+    {
+        if (isset($user_data['id'])) {
+            $sql = 'SELECT * FROM `authors` WHERE `soc_id` LIKE ?;';
+            $query = $this->connectDb()->prepare($sql);
+            $query->bindValue(1, $user_data['id'], PDO::PARAM_INT);
+            $query->execute();
+            $res = $query->fetch();
+            print_r($res);
+        }
+        return $authorId=0;
     }
 }

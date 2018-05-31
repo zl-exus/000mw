@@ -29,7 +29,7 @@
             <div class="container">
                 <div class="row">
                     <div class="wrap">
-                        <?php if (!isset($_SESSION['user-data'])) : ?>
+                        <?php if ($auth_data['is_authorized'] == false) : ?>
                         <div class="soc">
                             <h4>Войдите для того чтобы оставить сообщение или прокомментировать существующие</h4>
                             <div class="fb-block">
@@ -47,10 +47,13 @@
                                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="message[text]"></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Опубликовать</button>
+                                <a href="?logout=1" class="btn btn-primary">Выйти</a>
                             </form>
+                            
                         </div>
                         <?php endif; ?>
-                        <b><?php if (isset($_SESSION['user-data'])) print_r($_SESSION['user-data']); ?></b>
+                        <b><?php if (isset($user_data)) print_r($user_data); ?></b>
+                        <p><?php if (isset($auth_data)) print_r($auth_data); ?></p>
                     </div>
                 </div>
             </div>
@@ -105,8 +108,7 @@
                 </div>
             </div>
         </div>
-        <div id="1" class="info"></div>
-
+        <div id="urid" class="info"></div>
         <script src="js/libs.min.js"></script>
         <script src="js/main.min.js"></script>
 
