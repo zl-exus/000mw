@@ -6,25 +6,27 @@ require_once ("../conf/config.php");
 require_once ("../conf/autoload.php");
 
 $vk = new classes\Vk();
-$db = new \classes\Db();
+$db = new classes\Db();
 
-if (empty($_GET['code'])) {
-    header("Location: /");
-} else {
+session_start();
+
+if (!empty($_GET['code'])) {
+
     $token = $vk->getToken($_GET['code']);
 
-    $user_data = &$_SESSION['user_data'];
-    $user_data['token'] = $token['token'];
-    $user_data['user_id'] = $token['user_id'];
-    $user_data['first_name'] = $token['first_name'];
-
-    if (!$db->isRegstredVk($user_data)) {
-        $db->addUserVk($user_data);
+    if (!empty($token)) {
+        $data = $vk->getData($token);
+        $_SESSION['user_data'] = [];
+        $user_data = &$_SESSION['user_data'];
+        $user_data['uid'] = $data['id'];
+        $user_data['first_name'] = $data['first_name'];
+        $user_data['last_name'] = $data['last_name'];
+        $user_data['is_authorized'] = 1;
+        if ($db->isRegstredVk($user_data) == false) {
+            $db->addUserVk($user_data);
+        }
     }
-
-    print_r($user_data);
-    die();
-
+    header("Location: /");
+} else {
     header("Location: /");
 }
-

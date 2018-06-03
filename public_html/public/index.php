@@ -5,12 +5,8 @@ ini_set('display_errors', 1);  //выводить все ошибки в бра�
 require_once ("../conf/config.php");
 require_once ("../conf/autoload.php");
 
-if (!isset($_SESSION)) {
-    session_start();
-}
-
+session_start();
 
 require_once MODEL_PATH . 'model.php';
 require_once TEMPLATE_PATH . 'main.tpl.php';
-
 

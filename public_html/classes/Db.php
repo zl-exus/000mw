@@ -6,10 +6,10 @@ use PDO;
 class Db
 {
 
-    const USER = "id6002264_mwdbuser";
-    const PASS = "8864aamKK";
-    const HOST = "localhost";
-    const DB = "id6002264_mwdb";
+    const USER = DB_USER;
+    const PASS = DB_PASS;
+    const HOST = DB_HOST;
+    const DB   = DB_NAME;
 
     public static function connectDb()
     {
@@ -33,6 +33,12 @@ class Db
 
     private function getTablesNames()
     {
+        /*
+         * The utility method for obtaining all the names of tables from the 
+         * working database for transfer to some metodod, etc.
+         * 
+         * @return array of all table names from the working database
+         */
         $tables = $this->connectDb()->query('SHOW TABLES from ' . self::DB)->fetchAll();
         foreach ($tables as $tables => $table_name) {
             foreach ($table_name as $name) {
@@ -41,13 +47,23 @@ class Db
         }
         return $tables_names;
     }
-
+    
     private function buildQueryForTable($name)
     {
+        /*
+         * The service method that forms the query string to retrieve table data 
+         * based on the table name
+         * 
+         * @param string $name expected table name 
+         * 
+         * @return string structurally prepared for use in the query
+         */
         $tables_names = $this->getTablesNames();
         foreach ($tables_names as $table_name) {
             if ($name === $table_name) {
                 $table_name_for_query = $name;
+            } else {
+                exit('Wrong table name in: ' . next(debug_backtrace())['function']);
             }
         }
 
@@ -59,7 +75,8 @@ class Db
     /*
      *  Returns the associative array formed from the table.
      * 
-     *  @param $name string
+     *  @param string $name
+     * 
      *  @return array <b>PDO::FETCH_ASSOC</b> returns an array containing
      *  all of the remaining rows in the result set.
      */
@@ -69,8 +86,6 @@ class Db
                 $sql = $this->buildQueryForTable($name);
                 $table = $this->connectDb()->prepare($sql);
                 $table->bindValue(1, $name, PDO::PARAM_STR);
-//                var_dump($table->bindParam(':table_name', $name, PDO::PARAM_STR));
-//                die();
                 $table->execute();
                 $table_data = $table->fetchAll(PDO::FETCH_ASSOC);
             } catch (PDOException $ex) {
@@ -80,7 +95,7 @@ class Db
         return $table_data;
     }
 
-    public function getMessagesArray()   // перенести в модель
+    public function getMessagesArray()   
     {
         try {
             $mess_array = $this->connectDb()->query('SELECT * FROM message_header, message_body WHERE message_header.post_id = message_body.post_id ORDER BY posted DESC')->fetchAll(PDO::FETCH_ASSOC);
@@ -107,33 +122,36 @@ class Db
 
     public function addUserVk($user_data)
     {
-        if (isset($user_data['first_name']) && isset($user_data['id'])) {
+        $succes = '';
+        if (isset($user_data)) {
             $sql = 'INSERT INTO authors (first_name, last_name, soc_id) VALUES(?, ?, ?);';
             $add_user = $this->connectDb()->prepare($sql);
             $add_user->bindValue(1, $user_data['first_name'], PDO::PARAM_STR);
             $add_user->bindValue(2, $user_data['last_name'], PDO::PARAM_STR);
-            $add_user->bindValue(3, $user_data['id'], PDO::PARAM_STR);
-            $add_user->execute();
+            $add_user->bindValue(3, $user_data['uid'], PDO::PARAM_STR);
+            $success = $add_user->execute();
         }
+        return $success;
     }
-    
+
     public function isRegstredVk($user_data)
     {
         $isRegistred = false;
 
-        if (isset($user_data['id'])) {
+        if (isset($user_data['uid'])) {
             $sql = 'SELECT EXISTS(SELECT * FROM `authors` WHERE `soc_id` LIKE ?);';
             $query = $this->connectDb()->prepare($sql);
-            $query->bindValue(1, $user_data['id'], PDO::PARAM_INT);
+            $query->bindValue(1, $user_data['uid'], PDO::PARAM_INT);
             $query->execute();
-        }
-
-        if ($query->fetch(PDO::FETCH_NUM)) {
-            $isRegistred = true;
+            $rows_count = $query->fetch(PDO::FETCH_NUM);
+            if ($rows_count[0] != 0) {
+                $isRegistred = true;
+            }
         }
 
         return $isRegistred;
     }
+
     public function getAuthorId($user_data)
     {
         if (isset($user_data['id'])) {
@@ -144,6 +162,6 @@ class Db
             $res = $query->fetch();
             print_r($res);
         }
-        return $authorId=0;
+        return $authorId = 0;
     }
 }

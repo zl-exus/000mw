@@ -1,14 +1,20 @@
 <?php
 
+function getProtocol()
+{
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    
+    return $protocol;
+}
+
+define("PROTOCOL", getProtocol());
+
 define("ROOT", $_SERVER['DOCUMENT_ROOT']);
-define("CONTROLLER_PATH", ROOT . "/controllers/");
-define("MODEL_PATH", ROOT . "/models/");
-define("VIEW_PATH", ROOT . "/views/");
-define("CLASSES", ROOT . "/classes/");
-define("TEMPLATE_PATH", ROOT . "/templates/");
+define("MODEL_PATH", ROOT . '/models/');
+define("CLASSES", ROOT . '/classes/');
+define("TEMPLATE_PATH", ROOT . '/templates/');
 
 
-define('APP_ID', '6494881');
-define('APP_SECRET', 'rQ70NDYic15SsuIkEEd6');
-define('URL', 'https://messwall.000webhostapp.com');
+define("URL", PROTOCOL . $_SERVER['HTTP_HOST']); 
 
+require_once ("../conf/hid_conf.php");  // Hidden data for connection to DB, VK-APP, etc.

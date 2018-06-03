@@ -29,11 +29,11 @@
             <div class="container">
                 <div class="row">
                     <div class="wrap">
-                        <?php if ($auth_data['is_authorized'] == false) : ?>
+                        <?php if ($isAuth == false) : ?>
                         <div class="soc">
                             <h4>Войдите для того чтобы оставить сообщение или прокомментировать существующие</h4>
                             <div class="fb-block">
-                                <a href="https://oauth.vk.com/authorize?client_id=<?= APP_ID; ?>&display=page&redirect_uri=<?= URL; ?>&response_type=code&v=5.52">Войти через</a>
+                                <a href="https://oauth.vk.com/authorize?client_id=<?= APP_ID; ?>&display=page&redirect_uri=<?= URL; ?>/login.php&response_type=code&v=5.52">Войти через</a>
                                 <img src="../img/vk.svg" alt="vk">
                             </div>
                         </div>
@@ -47,13 +47,12 @@
                                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="message[text]"></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Опубликовать</button>
-                                <a href="?logout=1" class="btn btn-primary">Выйти</a>
+                                <a href="<?= $logout_url; ?>" class="btn btn-primary">Выйти</a>
                             </form>
                             
                         </div>
                         <?php endif; ?>
-                        <b><?php if (isset($user_data)) print_r($user_data); ?></b>
-                        <p><?php if (isset($auth_data)) print_r($auth_data); ?></p>
+                        <b><?php if (isset($_SESSION['user_data'])) print_r($_SESSION['user_data']); ?></b>
                     </div>
                 </div>
             </div>
