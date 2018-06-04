@@ -8,9 +8,15 @@
     div{
         margin-right: 15px;
     }
+    a{
+        &:hover{
+            text-decoration: none;
+        }
+    }
 }
 .message{
-    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     background-color: #f0f0f0;
     margin-bottom: 20px;
 }
@@ -28,6 +34,9 @@
 }
 .answ-block{
     text-align: right;
+    .form-group{
+        text-align: left;
+    }
 }
 .cbalink{
     position: fixed;
@@ -73,5 +82,13 @@
     img{
         width: 50px;
         height: 50px;
+    }
+}
+.info-message{
+    margin-top: 20px;
+    background-color: lighten(#007afd, 30%);
+    text-align: center;
+    h3{
+        line-height: 50px;
     }
 }

@@ -25,6 +25,7 @@ if (!empty($_GET['code'])) {
         if ($db->isRegstredVk($user_data) == false) {
             $db->addUserVk($user_data);
         }
+       
     }
     header("Location: /");
 } else {

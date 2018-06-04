@@ -9,7 +9,7 @@ class Db
     const USER = DB_USER;
     const PASS = DB_PASS;
     const HOST = DB_HOST;
-    const DB   = DB_NAME;
+    const DB = DB_NAME;
 
     public static function connectDb()
     {
@@ -47,7 +47,7 @@ class Db
         }
         return $tables_names;
     }
-    
+
     private function buildQueryForTable($name)
     {
         /*
@@ -95,29 +95,66 @@ class Db
         return $table_data;
     }
 
-    public function getMessagesArray()   
+    public function getMessagesArray($order_by = '', $order = 'ASC')
     {
+        /*
+         * Method for obtaining posts
+         * 
+         * @param string $order_by determines the column by which to sort
+         * @param string $order determines the direction of sorting 
+         * 
+         * @return array messages with messages body. 
+         */
+        if (isset($order_by)) {
+            $has_order = ' ORDER BY ' . $order_by . ' ' . $order;
+        }
+
         try {
-            $mess_array = $this->connectDb()->query('SELECT * FROM message_header, message_body WHERE message_header.post_id = message_body.post_id ORDER BY posted DESC')->fetchAll(PDO::FETCH_ASSOC);
+            $mess_array = $this->connectDb()->query("SELECT * FROM message_header, message_body WHERE message_header.post_id = message_body.post_id $has_order")->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $ex) {
             echo '<br>Возникла ошибка при попытке извлечь данные: ' . $ex->getMessage() . ' <br>';
         }
         return $mess_array;
     }
 
+    public function getCommentsArray($post_id, $order_by = '', $order = 'DESC')
+    {
+        if (isset($order_by)) {
+            $has_order = ' ORDER BY ' . $order_by . ' ' . $order;
+        }
+        $sql = "SELECT * FROM message_header, message_body WHERE message_header.parent_post_id = ?, message_header.post_id = message_body.post_id $has_order;";
+            $comments = $this->connectDb()->prepare($sql);
+            $comments->bindValue(1, $post_id);
+            $comments->execute();
+            $commentsArray = $comments->fetchAll();
+            
+            return $commentsArray;
+    }
+
     public function addMessage($user_id, $text, $parent_post_id = 0, $has_children = 0)
     {
-
-        $sql = 'BEGIN; 
-                  INSERT INTO message_header (parent_post_id, author_id, has_children) VALUES(?, ?, ?);
+        $succes = '';
+        if (isset($user_id) && isset($text) && $text != '') {
+            $sql = 'BEGIN; 
+                  INSERT INTO message_header (parent_post_id, author_id) VALUES(?, ?);
                   INSERT INTO message_body (post_id, post_text) VALUES(LAST_INSERT_ID(), ?);
                   COMMIT;';
-        $addmess = $this->connectDb()->prepare($sql);
-        $addmess->bindValue(1, $parent_post_id);
-        $addmess->bindValue(2, $user_id); // need get author_id!!!!
-        $addmess->bindValue(3, $has_children);
-        $addmess->bindValue(4, $text);
-        $addmess->execute();
+            $add_mess = $this->connectDb()->prepare($sql);
+            $add_mess->bindValue(1, $parent_post_id);
+            $add_mess->bindValue(2, $this->getAuthorId($user_id)); // need get author_id!!!!
+            $add_mess->bindValue(3, $text, PDO::PARAM_STR);
+
+            $succes = $add_mess->execute();
+        }
+        return $succes;
+    }
+
+    public function addChildren($post_id)
+    {
+        $sql = 'UPDATE `message_header` SET `has_children`= 1 WHERE `post_id`= ?;';
+        $add_child = $this->connectDb()->prepare($sql);
+        $add_child->bindValue(1, $post_id);
+        return $add_child->execute();
     }
 
     public function addUserVk($user_data)
@@ -152,16 +189,26 @@ class Db
         return $isRegistred;
     }
 
-    public function getAuthorId($user_data)
+    private function getAuthorId($user_uid)
     {
-        if (isset($user_data['id'])) {
-            $sql = 'SELECT * FROM `authors` WHERE `soc_id` LIKE ?;';
-            $query = $this->connectDb()->prepare($sql);
-            $query->bindValue(1, $user_data['id'], PDO::PARAM_INT);
-            $query->execute();
-            $res = $query->fetch();
-            print_r($res);
-        }
-        return $authorId = 0;
+        $sql = 'SELECT * FROM `authors` WHERE `soc_id` LIKE ?;';
+        $query = $this->connectDb()->prepare($sql);
+        $query->bindValue(1, $user_uid);
+        $query->execute();
+        $author_id = $query->fetchAll();
+
+        return $author_id[0]['author_id'];
+    }
+
+    public function getAuthorName($author_id)
+    {
+
+        $sql = 'SELECT * FROM `authors` WHERE `author_id` LIKE ?;';
+        $query = $this->connectDb()->prepare($sql);
+        $query->bindValue(1, $author_id, PDO::PARAM_INT);
+        $query->execute();
+        $res = $query->fetch();
+
+        return $res['first_name'] . ' ' . $res['last_name'];
     }
 }

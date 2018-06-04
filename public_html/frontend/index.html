@@ -25,6 +25,7 @@
                 </div>
             </div>
         </div>
+
         <div class="strict">
             <div class="container">
                 <div class="row">
@@ -39,12 +40,17 @@
                         <div class="form-wrap">
                             <form id="message" method="post">
                                 <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Введите сообщение</label>
+                                    <label for="FormControlTextarea1">Введите сообщение</label>
                                     <input id="user-id" name="user-id" type="hidden" value="">
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="message[text]"></textarea>
+                                    <textarea class="form-control" id="FormControlTextarea1" rows="3" name="message[text]"></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Опубликовать</button>
                             </form>
+                            <div class="info-block">
+                                <div class="info-message">
+                                    <h3>Спасибо, Ваше сообщение отправлено</h3>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -127,8 +133,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="message col-12" data-id="2"></div>
-                    <div class="message col-12" data-id="3"></div>
+                    
+
+                    <div id="form">
+                        <form id="comment" method="post">
+                            <div class="form-group">
+                                <label for="CommentForm">Введите текст комментария</label>
+                                <input id="user-id" name="user-id" type="hidden" value="">
+                                <input id="parent-mes-id" name="message[parent_id]" type="hidden">
+                                <textarea class="form-control" id="CommentForm" rows="3" name="message[text]"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Опубликовать</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

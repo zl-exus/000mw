@@ -21,89 +21,117 @@
         <div class="header">
             <div class="container">
                 <div class="row">
-                    <h1>Стена сообщений</h1>
+                    <div class="col-12">
+                        <h1>Стена сообщений</h1>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="strict">
             <div class="container">
                 <div class="row">
-                    <div class="wrap">
-                        <?php if ($isAuth == false) : ?>
-                        <div class="soc">
-                            <h4>Войдите для того чтобы оставить сообщение или прокомментировать существующие</h4>
-                            <div class="fb-block">
-                                <a href="https://oauth.vk.com/authorize?client_id=<?= APP_ID; ?>&display=page&redirect_uri=<?= URL; ?>/login.php&response_type=code&v=5.52">Войти через</a>
-                                <img src="../img/vk.svg" alt="vk">
-                            </div>
-                        </div>
-                        <?php else :
-                        ?>
-                        <div class="form-wrap">
-                            <form id="message" method="post">
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Введите сообщение</label>
-                                    <input id="user-id" name="user-id" type="hidden" value="">
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="message[text]"></textarea>
+                    <div class="col-12">
+                        <div class="wrap">
+                            <?php if ($isAuth == false) : ?>
+                                <div class="soc">
+                                    <h4>Войдите для того чтобы оставить сообщение или прокомментировать существующие</h4>
+                                    <div class="fb-block">
+                                        <a href="https://oauth.vk.com/authorize?client_id=<?= APP_ID; ?>&display=page&redirect_uri=<?= URL; ?>/login.php&response_type=code&v=5.52">Войти через</a>
+                                        <img src="../img/vk.svg" alt="vk">
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Опубликовать</button>
-                                <a href="<?= $logout_url; ?>" class="btn btn-primary">Выйти</a>
-                            </form>
-                            
-                        </div>
-                        <?php endif; ?>
-                        <b><?php if (isset($_SESSION['user_data'])) print_r($_SESSION['user_data']); ?></b>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="message-block">
-            <div class="container">
-                <div class="row">
-                    <?php foreach ($messages as $message) : ?>
-                        <div id="message_id-<?= $message['post_id']; ?>" class="message col-12" data-id="<?= $message['post_id']; ?>">
-                            <div class="post-header">
-                                <div class="author"><a href="#message-<?= $message['post_id']; ?>">Андрей <?= $message['author_id']; ?> опубликовал <?= $message['posted']; ?></a></div>
-                            </div>
-                            <div class="message-text">
-                                <?= $message['post_text']; ?>
-                            </div>
-                            <div class="answ-block">
-                                <a href="#" class="answ-link">Комментировать</a>
-                            </div>
-                            <?php if ($message['has_children'] != 0) : // надо подумать как выводить коменты
-
-                                ?>
-                                <div class="comment" data-id="4">
-                                    <div class="post-header">
-                                        <div class="author">Изабелла</div>
-                                        <div class="posted">27.05.18 в 18:00</div>
-                                    </div>
-                                    <div class="message-text">
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                    </div>
-                                    <div class="answ-block">
-                                        <a href="#" class="answ-link">Комментировать</a>
-                                    </div>
-                                    <div class="comment" data-id="4">
-                                        <div class="post-header">
-                                            <div class="author">Андрей</div>
-                                            <div class="posted">27.05.18 в 18:00</div>
+                            <?php else : ?>
+                                <div class="form-wrap">
+                                    <form id="message" method="post">
+                                        <div class="form-group">
+                                            <label for="messageForm">Введите сообщение</label>
+                                            <input id="user-id" name="user-id" type="hidden" value="">
+                                            <textarea class="form-control" id="messageForm" rows="3" name="message[text]"></textarea>
                                         </div>
-                                        <div class="message-text">
-                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                        </div>
-                                        <div class="answ-block">
-                                            <a href="#" class="answ-link">Комментировать</a>
+                                        <button type="submit" class="btn btn-primary">Опубликовать</button>
+                                        <a href="<?= $logout_url; ?>" class="btn btn-primary">Выйти</a>
+                                    </form>
+                                    <div class="info-block">
+                                        <div class="info-message">
+                                            <h3><?php if (isset($_SESSION['info_message'][0])) echo $_SESSION['info_message'][0]; ?></h3>
                                         </div>
                                     </div>
                                 </div>
                             <?php endif; ?>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="message-block">
+            <div class="container">
+                <div class="row">
+                    <?php foreach ($messages as $message) : ?> 
+                        <div class="col-12">
+                            <div id="message_id-<?= $message['post_id']; ?>" class="message col-12 post" data-id="<?= $message['post_id']; ?>">
+                                <div class="post-header">
+                                    <div class="author"><a href="#message-<?= $message['post_id']; ?>"><?= $db->getAuthorName($message['author_id']); ?> опубликовал <?= implode(' в ', explode(' ', $message['posted'])); ?></a></div>
+                                </div>
+                                <div class="message-text">
+                                    <?= $message['post_text']; ?>
+                                </div>
+                                <div class="answ-block">
+                                    <?php if ($isAuth == true) : ?>
+                                        <a href="#" class="answ-link">Комментировать</a>
+                                    <?php endif; ?>
+                                </div>
+                                <?php
+                                if ($message['has_children'] != 0) :
+                                    $comments = $db->getCommentsArray($message[parent_post_id]);
+                                    foreach ($comments as $comment) :
 
+                                        ?>
+                                        <div id="message_id-<?= $comment['post_id']; ?>" class="comment post" data-id="4">
+                                            <div class="post-header">
+                                                <div class="author"><a href="#message-<?= $comment['post_id']; ?>"><?= $db->getAuthorName($comment['author_id']); ?> опубликовал <?= implode(' в ', explode(' ', $comment['posted'])); ?></a></div>
+                                            </div>
+                                            <div class="message-text">
+                                                <?= $comment['post_text']; ?>
+                                            </div>
+                                            <div class="answ-block">
+                                                <?php if ($isAuth == true) : ?>
+                                                    <a href="#" class="answ-link">Комментировать</a>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="comment" data-id="4">
+                                                <div class="post-header">
+                                                    <div class="author">Андрей</div>
+                                                    <div class="posted">27.05.18 в 18:00</div>
+                                                </div>
+                                                <div class="message-text">
+                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                                </div>
+                                                <div class="answ-block">
+                                                    <?php if ($isAuth == true) : ?>
+                                                        <a href="#" class="answ-link">Комментировать</a>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php
+                                    endforeach;
+                                endif;
+
+                                ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    <div id="form">
+                        <form id="comment" method="post">
+                            <div class="form-group">
+                                <label for="commentForm">Введите текст комментария</label>
+                                <input id="user-id" name="user-id" type="hidden" value="">
+                                <input id="parent-mes-id" name="message[parent_id]" type="hidden">
+                                <textarea class="form-control" id="commentForm" rows="3" name="message[text]"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Опубликовать</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
