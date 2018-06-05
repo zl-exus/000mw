@@ -19,6 +19,14 @@
     padding-bottom: 20px;
     background-color: #f0f0f0;
     margin-bottom: 20px;
+    .message{
+        margin-top: 20px;
+        padding-left: 20px;
+        padding-right: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-left: 1px solid darken(#f0f0f0, 20%);
+    }
 }
 .message-text{
     margin-bottom: 10px;
@@ -75,9 +83,6 @@
         left: 0;
         right: 0;
         text-align: left;
-        &:hover{
-            text-decoration: none;
-        }
     }
     img{
         width: 50px;
@@ -90,5 +95,10 @@
     text-align: center;
     h3{
         line-height: 50px;
+    }
+}
+a{
+    &:hover{
+        text-decoration: none;
     }
 }

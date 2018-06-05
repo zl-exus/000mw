@@ -114,24 +114,12 @@ class Db
         } catch (PDOException $ex) {
             echo '<br>Возникла ошибка при попытке извлечь данные: ' . $ex->getMessage() . ' <br>';
         }
+
+
         return $mess_array;
     }
 
-    public function getCommentsArray($post_id, $order_by = '', $order = 'DESC')
-    {
-        if (isset($order_by)) {
-            $has_order = ' ORDER BY ' . $order_by . ' ' . $order;
-        }
-        $sql = "SELECT * FROM message_header, message_body WHERE message_header.parent_post_id = ?, message_header.post_id = message_body.post_id $has_order;";
-            $comments = $this->connectDb()->prepare($sql);
-            $comments->bindValue(1, $post_id);
-            $comments->execute();
-            $commentsArray = $comments->fetchAll();
-            
-            return $commentsArray;
-    }
-
-    public function addMessage($user_id, $text, $parent_post_id = 0, $has_children = 0)
+    public function addMessage($user_id, $text, $parent_post_id = 0)
     {
         $succes = '';
         if (isset($user_id) && isset($text) && $text != '') {
@@ -143,6 +131,9 @@ class Db
             $add_mess->bindValue(1, $parent_post_id);
             $add_mess->bindValue(2, $this->getAuthorId($user_id)); // need get author_id!!!!
             $add_mess->bindValue(3, $text, PDO::PARAM_STR);
+            if ($parent_post_id != 0) {
+                $this->addChildren($parent_post_id);
+            }
 
             $succes = $add_mess->execute();
         }
@@ -151,9 +142,10 @@ class Db
 
     public function addChildren($post_id)
     {
-        $sql = 'UPDATE `message_header` SET `has_children`= 1 WHERE `post_id`= ?;';
+        $sql = 'UPDATE `message_header` SET `has_children`= ? WHERE `message_header`.`post_id`= ?;';
         $add_child = $this->connectDb()->prepare($sql);
-        $add_child->bindValue(1, $post_id);
+        $add_child->bindValue(1, 1);
+        $add_child->bindValue(2, $post_id);
         return $add_child->execute();
     }
 
@@ -210,5 +202,53 @@ class Db
         $res = $query->fetch();
 
         return $res['first_name'] . ' ' . $res['last_name'];
+    }
+
+    public function addChildsIDsField($messages)
+    {
+        foreach ($messages as &$message) {
+            if ($message['has_children'] != 0) {
+                $parent_message = $message['post_id'];
+                $childs = &$message['childs'][];
+                foreach ($messages as $comment) {
+                    if ($parent_message == $comment['parent_post_id']) {
+                        $childs = $comment['post_id'];
+                    }
+                }
+            }
+        }
+        return $messages;
+    }
+
+    public function buildMessagesTree($message_data, $messages_array, $has_parent = false, $isAuth = false)
+    {
+        $post_id = $message_data['post_id'];
+
+        $html = '<div id="message_id-' . $post_id . '" " class="message col-12 post" data-id="' . $post_id . '">';
+        $html .= '<div class="post-header"><div class="author"><a href="#message-' . $post_id . '">';
+        $html .= $this->getAuthorName($message_data['author_id']) . ' опубликовал ' . implode(' в ', explode(' ', $message_data['posted'])) . '</a></div></div>';
+        $html .= '<div class="message-text">' . $message_data['post_text'] . '</div>';
+
+        if ($isAuth == true) {
+            $html .= '<div class="answ-block"><a href="#" class="answ-link">Комментировать</a></div>';
+        }
+
+        $has_children = intval($message_data['has_children']);
+
+        if ($has_children != 0) {
+
+            $childs = $message_data['childs'];
+
+            foreach ($childs as $child_post) {
+                foreach ($messages_array as $comment) {
+
+                    if ($comment['post_id'] == intval($child_post)) {
+                        $html .= $this->buildMessagesTree($comment, $messages_array, true, $isAuth);
+                    }
+                }
+            }
+        }
+        $html .= '</div>';
+        return $html;
     }
 }

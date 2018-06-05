@@ -28,7 +28,8 @@ $('#message').submit(function () {
 });
 
 $('#comment').submit(function () {
-    var parent_mess_id = $('#comment').closest('.post').attr('data-id')
+    var parent_mess_id = $('#comment').closest('.post').attr('data-id');
+    console.log(parent_mess_id);
     var hid_input_id = $('#parent-mes-id');
     hid_input_id.attr('value', parent_mess_id);
 });

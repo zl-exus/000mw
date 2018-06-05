@@ -3,6 +3,7 @@ namespace classes;
 
 $db = new Db;
 
+
 $logout_url = URL . '/logout.php';
 
 $isAuth = false;
@@ -15,15 +16,15 @@ if (isset($_SESSION['info_message'])) {
 }
 
 if (isset($_POST['message']['text'])) {
-    
+
     $parent_message_id = isset($_POST['message']['parent_id']) ? $_POST['message']['parent_id'] : '';
-    
+
     if (isset($_POST['message']['parent_id'])) {
         $message_text = $_POST['message']['text'];
     }
-    
+
     $message_text = $_POST['message']['text'];
-    
+
     $info_message = &$_SESSION['info_message'];
     $user_id = $_SESSION['user_data']['uid'];
     if ($message_text == '') {
@@ -42,3 +43,7 @@ if (isset($_POST['message']['text'])) {
 
 
 $messages = $db->getMessagesArray('posted', 'DESC');
+
+$messages_with_childs = $db->addChildsIDsField($messages);
+
+//$meassages_html = $db->buildMessagesTree($messages_with_childs, $isAuth);
