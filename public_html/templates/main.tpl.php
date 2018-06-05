@@ -69,7 +69,9 @@
                     <div class="col-12">
                     <?php
                     foreach ($messages_with_childs as $message) :
-                         echo $db->buildMessagesTree($message, $messages_with_childs, false,$isAuth);
+                        if ($message['parent_post_id'] == 0) {
+                            echo $db->buildMessagesTree($message, $messages_with_childs, false,$isAuth);
+                        }
                     endforeach;
                     ?>
                     </div>

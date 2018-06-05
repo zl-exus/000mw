@@ -238,10 +238,9 @@ class Db
         if ($has_children != 0) {
 
             $childs = $message_data['childs'];
-
+            
             foreach ($childs as $child_post) {
                 foreach ($messages_array as $comment) {
-
                     if ($comment['post_id'] == intval($child_post)) {
                         $html .= $this->buildMessagesTree($comment, $messages_array, true, $isAuth);
                     }
