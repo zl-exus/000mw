@@ -45,5 +45,8 @@ if (isset($_POST['message']['text'])) {
 $messages = $db->getMessagesArray('posted', 'DESC');
 
 $messages_with_childs = $db->addChildsIDsField($messages);
+//echo '<pre>';
+//var_dump($messages_with_childs);
+//echo '</pre>';
 
 //$meassages_html = $db->buildMessagesTree($messages_with_childs, $isAuth);

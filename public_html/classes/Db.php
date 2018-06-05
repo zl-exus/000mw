@@ -206,17 +206,26 @@ class Db
 
     public function addChildsIDsField($messages)
     {
+        $mess_for_iter = $messages;
+        
         foreach ($messages as &$message) {
             if ($message['has_children'] != 0) {
                 $parent_message = $message['post_id'];
-                $childs = &$message['childs'][];
-                foreach ($messages as $comment) {
-                    if ($parent_message == $comment['parent_post_id']) {
-                        $childs = $comment['post_id'];
+                $childs = &$message['childs'];
+                $tmp_childs =[];
+                foreach ($mess_for_iter as $comment) {
+                    if (intval($comment['parent_post_id']) == intval($parent_message)) {
+                        array_push($tmp_childs, $comment['post_id']);
                     }
                 }
+                $childs = array_reverse($tmp_childs);
+                
             }
         }
+//        echo '<pre>';
+//        print_r($messages);
+//        echo '<pre>';
+//        die();
         return $messages;
     }
 
@@ -238,7 +247,7 @@ class Db
         if ($has_children != 0) {
 
             $childs = $message_data['childs'];
-            
+
             foreach ($childs as $child_post) {
                 foreach ($messages_array as $comment) {
                     if ($comment['post_id'] == intval($child_post)) {

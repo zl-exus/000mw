@@ -34,7 +34,7 @@
                         <div class="wrap">
                             <?php if ($isAuth == false) : ?>
                                 <div class="soc">
-                                    <h4>Войдите для того чтобы оставить сообщение или прокомментировать существующие</h4>
+                                    <h4>Для добавления и комментирования сообщений выполните вход</h4>
                                     <div class="fb-block">
                                         <a href="https://oauth.vk.com/authorize?client_id=<?= APP_ID; ?>&display=page&redirect_uri=<?= URL; ?>/login.php&response_type=code&v=5.52">Войти через</a>
                                         <img src="../img/vk.svg" alt="vk">
